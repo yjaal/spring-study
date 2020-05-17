@@ -1,2 +1,2 @@
 # spring-study
-springx相关应用
+spring相关应用
