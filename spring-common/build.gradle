@@ -1,0 +1,34 @@
+dependencies {
+    //操作excel工具,分别可以操作03版excel和07版excel
+//    compile group: 'org.apache.poi', name: 'poi', version: '3.9'
+//    compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.9'
+    //alibaba的工具，解决上面两个的效率和OOM问题，上面的POI已包含，可以去掉
+    compile group: 'com.alibaba', name: 'easyexcel', version: '2.2.3'
+    compile('com.alibaba:easyexcel:2.2.3') {
+        exclude group: 'org.springframework.boot'
+        exclude group: 'junit'
+        exclude group: 'org.projectlombok'
+        exclude group: 'org.slf4j'
+        exclude group: 'ch.qos.logback'
+    }
+
+    //日志工具，druid需要
+    compile group: 'log4j', name: 'log4j', version: '1.2.17'
+    compile group: 'com.alibaba', name: 'druid', version: '1.1.22'
+
+    compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+    compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+
+    //web包含了spring-boot-starter，而spring-boot-starter又包含了logging，也就是logback
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation "org.springframework.boot:spring-boot-starter-undertow:${springBootVersion}"
+
+    //mybatis
+    implementation group: 'com.baomidou', name: 'mybatis-plus-boot-starter', version: '3.3.1'
+    implementation group: 'com.baomidou', name: 'mybatis-plus-generator', version: '3.3.1'
+
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '5.1.49'
+
+    //模板引擎
+    compile group: 'org.apache.velocity', name: 'velocity-engine-core', version: '2.2'
+}
