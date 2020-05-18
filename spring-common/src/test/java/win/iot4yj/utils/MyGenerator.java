@@ -107,8 +107,8 @@ public class MyGenerator {
             .setNaming(NamingStrategy.underline_to_camel)
             //表名前缀，生成实体的时候会去除
             .setTablePrefix(TABLE_PREFIXES)
-            //使用lombok
-            .setEntityLombokModel(true)
+            //不使用lombok
+            .setEntityLombokModel(false)
             //逆向工程使用的表，可以有多个
             .setInclude(TABLE_NAMES)
             // 自定义实体父类，默认为 com.baomidou.demo.TestEntity

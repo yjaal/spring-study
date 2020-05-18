@@ -3,12 +3,11 @@ dependencies {
 //    compile group: 'org.apache.poi', name: 'poi', version: '3.9'
 //    compile group: 'org.apache.poi', name: 'poi-ooxml', version: '3.9'
     //alibaba的工具，解决上面两个的效率和OOM问题，上面的POI已包含，可以去掉
-    compile group: 'com.alibaba', name: 'easyexcel', version: '2.2.3'
     compile('com.alibaba:easyexcel:2.2.3') {
         exclude group: 'org.springframework.boot'
         exclude group: 'junit'
         exclude group: 'org.projectlombok'
-        exclude group: 'org.slf4j'
+        exclude module: 'slf4j'
         exclude group: 'ch.qos.logback'
     }
 

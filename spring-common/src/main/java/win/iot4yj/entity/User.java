@@ -7,9 +7,6 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import java.io.Serializable;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.experimental.Accessors;
 
 /**
  * <p>
@@ -17,11 +14,8 @@ import lombok.experimental.Accessors;
  * </p>
  *
  * @author joyang
- * @since 2020-05-17
+ * @since 2020-05-18
  */
-@Data
-@EqualsAndHashCode(callSuper = false)
-@Accessors(chain = true)
 @TableName("t_user")
 @ApiModel(value="User对象", description="用户表")
 public class User extends Model<User> {
@@ -45,9 +39,59 @@ public class User extends Model<User> {
     private String cardNo;
 
 
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public String getCardNo() {
+        return cardNo;
+    }
+
+    public void setCardNo(String cardNo) {
+        this.cardNo = cardNo;
+    }
+
     @Override
     protected Serializable pkVal() {
         return this.id;
     }
 
+    @Override
+    public String toString() {
+        return "User{" +
+        "id=" + id +
+        ", name=" + name +
+        ", sex=" + sex +
+        ", age=" + age +
+        ", cardNo=" + cardNo +
+        "}";
+    }
 }
