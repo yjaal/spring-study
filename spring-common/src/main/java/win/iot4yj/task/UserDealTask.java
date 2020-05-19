@@ -21,6 +21,6 @@ public class UserDealTask {
      */
     @Scheduled(cron = "*/6 * * * * ?")
     private void first() {
-        log.error("hello spring task");
+        log.info("hello spring task");
     }
 }

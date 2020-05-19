@@ -3,6 +3,7 @@
     <!-- 参考：https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/
     https://www.jianshu.com/p/1ded57f6c4e3https://www.jianshu.com/p/1ded57f6c4e3
     http://www.logback.cn/
+    springboot默认配置文件：org.springboot包中的logging包中
     笼统的讲就是slf4j是一系列的日志接口，而log4j,logback是具体实现了的日志框架
     logger: 定义日志级别
     appender：控制日志输出目的地，一个logger可以绑定多个appender

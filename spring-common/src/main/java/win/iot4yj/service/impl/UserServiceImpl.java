@@ -1,5 +1,8 @@
 package win.iot4yj.service.impl;
 
+import java.util.List;
+import javax.annotation.Resource;
+import org.springframework.beans.factory.annotation.Autowired;
 import win.iot4yj.entity.User;
 import win.iot4yj.mapper.UserMapper;
 import win.iot4yj.service.UserService;
@@ -16,5 +19,8 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+
+    @Resource
+    private UserMapper userMapper;
 
 }
