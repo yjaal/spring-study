@@ -24,15 +24,15 @@ public class UserServiceImplTest {
     public void batchInsertTest() {
         List<User> users = new ArrayList<>();
         User user1 = new User();
-        user1.setId("001");
-        user1.setName("泥巴");
+        user1.setId("003");
+        user1.setName("泥巴-003");
         user1.setAge(18);
         user1.setSex("1");
         user1.setCardNo("001");
 
         User user2 = new User();
-        user2.setId("002");
-        user2.setName("yj");
+        user2.setId("004");
+        user2.setName("yj-004");
         user2.setAge(29);
         user2.setSex("0");
         user2.setCardNo("002");
@@ -65,5 +65,11 @@ public class UserServiceImplTest {
         users.add(user2);
         boolean res = userService.updateBatchById(users);
         Assert.assertTrue(res);
+    }
+
+    @Test
+    public void getPageTest() {
+        List<User> users = userService.getPage(1, 2, null);
+        Assert.assertEquals(2, users.size());
     }
 }
