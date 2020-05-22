@@ -1,6 +1,7 @@
 package win.iot4yj.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import java.util.List;
 import javax.annotation.Resource;
@@ -35,7 +36,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         //默认起始页为1，每页显示10条
         Page<User> page = new Page<>(num, count);
         QueryWrapper<User> queryWrapper = new QueryWrapper<>(user);
-        Page<User> pageRes = userMapper.selectPage(page, null);
+        IPage<User> pageRes = userMapper.selectPage(page, null);
         List<User> users = pageRes.getRecords();
         long size = pageRes.getSize();
         long total = pageRes.getTotal();
