@@ -30,7 +30,7 @@ public class MyGenerator {
         .map(e -> new TableFill(e, FieldFill.INSERT_UPDATE)).collect(Collectors.toList());
 
     //要反向生成的表
-    private static final String[] TABLE_NAMES = new String[]{"t_user"};
+    private static final String[] TABLE_NAMES = new String[]{"t_quartz_job", "t_quartz_trigger", "t_quartz_cron"};
     //反向生成表的前缀，在生成实体类的时候会去掉
     private static final String[] TABLE_PREFIXES = new String[]{"t_"};
     //主键生成策略

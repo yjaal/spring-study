@@ -14,13 +14,13 @@ import io.swagger.annotations.ApiModelProperty;
  * </p>
  *
  * @author joyang
- * @since 2020-05-18
+ * @since 2020-05-24
  */
 @TableName("t_user")
 @ApiModel(value="User对象", description="用户表")
 public class User extends Model<User> {
 
-    private static final long serialVersionUID=1L;
+    private static final long serialVersionUID = 1L;
 
     @ApiModelProperty(value = "工号")
     @TableId(value = "id", type = IdType.INPUT)

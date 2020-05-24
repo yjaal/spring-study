@@ -43,7 +43,7 @@ spring:
             password: walp1314
         slave_1:
           driver-class-name: com.mysql.jdbc.Driver
-            url: jdbc:mysql://localhost:13307/spring_study?characterEncoding=utf8
+            url: jdbc:mysql://localhost:13307/spring_study1?characterEncoding=utf8
             username: root
             password: walp1314
 
