@@ -1,6 +1,39 @@
 spring:
   profiles:
     active: dev
+  quartz:
+    #持久化到数据库方式
+    job-store-type: jdbc
+    initialize-schema: never
+    # 定时任务开关，true-开  false-关
+    auto-startup: false
+    startup-delay: 10
+    properties:
+      org:
+        quartz:
+          scheduler:
+            instanceName: DefaultQuartzScheduler
+            instanceId: AUTO
+            wrapJobExecutionInUserTransaction: false
+            rmi:
+              export: false
+              proxy: false
+          jobStore:
+            class: org.quartz.impl.jdbcjobstore.JobStoreTX
+            driverDelegateClass: org.quartz.impl.jdbcjobstore.StdJDBCDelegate
+            tablePrefix: QRTZ_
+            # 是否是集群，false：否
+            isClustered: true
+            clusterCheckinInterval: 10000
+            useProperties: false
+            misfireThreshold: 5000
+          threadPool:
+            class: org.quartz.simpl.SimpleThreadPool
+            # 并发个数
+            threadCount: 10
+            # 优先级
+            threadPriority: 5
+            threadsInheritContextClassLoaderOfInitializingThread: true
 
 server:
   port: 8080

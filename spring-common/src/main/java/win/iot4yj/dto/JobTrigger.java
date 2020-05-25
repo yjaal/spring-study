@@ -40,7 +40,7 @@ public class JobTrigger {
     /**
      * 状态
      */
-    private String triggerStatus;
+    private String triggerState;
 
     /**
      * 创建时间
@@ -113,12 +113,12 @@ public class JobTrigger {
         this.zone = zone;
     }
 
-    public String getTriggerStatus() {
-        return triggerStatus;
+    public String getTriggerState() {
+        return triggerState;
     }
 
-    public void setTriggerStatus(String triggerStatus) {
-        this.triggerStatus = triggerStatus;
+    public void setTriggerState(String triggerState) {
+        this.triggerState = triggerState;
     }
 
     public String getStartTime() {
