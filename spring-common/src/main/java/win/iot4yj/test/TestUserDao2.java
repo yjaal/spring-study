@@ -12,6 +12,7 @@ public class TestUserDao2 {
     }
 
     public static void insertUser(User user) {
-        throw new UnsupportedOperationException();
+//        throw new UnsupportedOperationException();
+        System.out.println("haha");
     }
 }
