@@ -1,4 +1,3 @@
 rootProject.name = 'spring-study'
-include 'spring-study-test'
 include 'spring-common'
 
