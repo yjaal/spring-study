@@ -44,9 +44,4 @@ dependencies {
     // Jsoup 爬虫工具，可以爬取网页，但是无法爬取电影，视频，ajax等。
     // 其他强大等爬虫工具参考：https://www.zhihu.com/question/31427895
     compile group: 'org.jsoup', name: 'jsoup', version: '1.13.1'
-    
-    //测试依赖
-    testCompile "org.powermock:powermock-api-mockito2:${powerMockVersion}"
-    testCompile "org.powermock:powermock-module-junit4:${powerMockVersion}"
-    testCompile "org.mockito:mockito-core:${mockVersion}"
 }
