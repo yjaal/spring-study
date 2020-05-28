@@ -47,21 +47,11 @@ dependencies {
 
     //spock测试依赖:使用3.x版本的时候报错，而2.x版本不支持1.8lambda表达式
 //    compile 'org.codehaus.groovy:groovy-all:3.0.4'
-    testCompile 'org.spockframework:spock-spring:2.0-M2-groovy-3.0'
-    testImplementation('org.spockframework:spock-core:2.0-M2-groovy-3.0') {
-        exclude group: 'org.codehaus.groovy'
-    }
-    testImplementation('org.codehaus.groovy:groovy:3.0.2')
-    testImplementation('org.codehaus.groovy:groovy-sql:3.0.2')
-    testImplementation('org.codehaus.groovy:groovy-json:3.0.2')
-    testImplementation('org.codehaus.groovy:groovy-nio:3.0.2')
-    testImplementation('org.codehaus.groovy:groovy-macro:3.0.2')
-    testImplementation('org.codehaus.groovy:groovy-templates:3.0.2')
-    testImplementation('org.codehaus.groovy:groovy-test:3.0.2')
-    testImplementation('org.codehaus.groovy:groovy-xml:3.0.2')
-//    compile 'org.codehaus.groovy:groovy-all:2.4.15'
-//    testCompile 'org.spockframework:spock-spring:1.0-groovy-2.4'
-//    testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
+//    testCompile 'org.spockframework:spock-spring:2.0-M2-groovy-3.0'
+//    testImplementation 'org.spockframework:spock-core:2.0-M2-groovy-3.0'
+    compile 'org.codehaus.groovy:groovy-all:2.4.15'
+    testCompile 'org.spockframework:spock-spring:1.0-groovy-2.4'
+    testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
     //enables mocking of classes (in addition to interfaces)
     testCompile 'cglib:cglib-nodep:3.3.0'
     //enables mocking of classes without default constructor (together with CGLIB)
