@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: dev
+    active: test
   quartz:
     #持久化到数据库方式
     job-store-type: jdbc

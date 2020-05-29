@@ -1,34 +1,21 @@
 package win.iot4yj.service
 
+
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.context.annotation.Configuration
+import spock.lang.Shared
 import spock.lang.Specification
 
-
+@Configuration("application.yml")
+@SpringBootTest
 class UserServiceTest extends Specification {
 
-    // 初始化
-    def setupSpec() {
-        println ">>>>>>   setupSpec"
-    }
-    def setup() {
-        println ">>>>>>   setup"
-    }
-    def cleanup() {
-        println ">>>>>>   cleanup"
-    }
-    def cleanupSpec() {
-        println ">>>>>>   cleanupSpec"
-    }
+    @Shared
+    private UserService userService;
 
-    // 测试标题不支持中文
-    def "spock test"() {
-        given:
-        def a = 1
-        def b = 2
 
-        expect:
-        a > b
+    def "测试根据id查询用户方法"() {
 
-        println "test method finished!"
     }
 
 }
