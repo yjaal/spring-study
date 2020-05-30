@@ -1263,7 +1263,9 @@ class UserServiceTest extends Specification {
 
 `https://gitee.com/yawensilence/demo-spock`
 
-这个克隆下来是可以运行的。
+这个克隆下来是可以运行的。相关内容参考：
+
+`https://www.baeldung.com/spring-spock-testing`
 
 
 
