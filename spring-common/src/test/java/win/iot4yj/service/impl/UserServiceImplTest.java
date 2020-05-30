@@ -70,4 +70,10 @@ public class UserServiceImplTest {
         List<User> users = userService.getPage(1, 2, null);
         Assert.assertEquals(0, users.size());
     }
+
+    @Test
+    public void getUserById() {
+        User user = userService.getUserById("00424556");
+        Assert.assertEquals("yj", user.getName());
+    }
 }

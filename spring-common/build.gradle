@@ -50,8 +50,8 @@ dependencies {
 //    testCompile 'org.spockframework:spock-spring:2.0-M2-groovy-3.0'
 //    testImplementation 'org.spockframework:spock-core:2.0-M2-groovy-3.0'
     compile 'org.codehaus.groovy:groovy-all:2.4.15'
-    testCompile 'org.spockframework:spock-spring:1.0-groovy-2.4'
-    testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
+    testCompile 'org.spockframework:spock-spring:1.2-groovy-2.4'
+    testCompile "org.spockframework:spock-core:1.2-groovy-2.4"
     //enables mocking of classes (in addition to interfaces)
     testCompile 'cglib:cglib-nodep:3.3.0'
     //enables mocking of classes without default constructor (together with CGLIB)

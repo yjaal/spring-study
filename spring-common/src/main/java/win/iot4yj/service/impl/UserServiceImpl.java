@@ -36,6 +36,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public List<User> getPage(int num, int count, User user) {
+
         //默认起始页为1，每页显示10条
         Page<User> page = new Page<>(num, count);
         QueryWrapper<User> queryWrapper = new QueryWrapper<>(user);

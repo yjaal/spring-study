@@ -1,19 +1,19 @@
 package win.iot4yj.service
-import static spock.util.matcher.HamcrestSupport.expect
-import static spock.util.matcher.HamcrestMatchers.closeTo
 
+
+import groovy.sql.Sql
+import spock.lang.Shared
 import spock.lang.Specification
 
 class SpockTest1 extends Specification {
 
+    @Shared
+    def sql = Sql.newInstance("jdbc:mysql://localhost:13306/spring_study", "root", "walp1314", "com.mysql.jdbc.Driver")
 
-
-    def "test for closeTo()"() {
-        given:
-        def a = 101256
-        when:
-        def b = a / 10
-        then:"b的值在200到10000之间"
-        expect b, closeTo(10000, 200)
+    def "test_database"() {
+        expect:
+        rows*.id == ['001', '002', '003', '004']
+        where:
+        rows = sql.rows("select * from t_user")
     }
 }
