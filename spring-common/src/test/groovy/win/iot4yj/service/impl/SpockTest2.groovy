@@ -12,11 +12,9 @@ class SpockTest2 extends Specification {
     private UserService userService
 
     def "test_UserService_getUserById"() {
+        given:
+        def user = userService.getUserById("00424556")
         expect:
         user.name == 'yj'
-        user.sex == '1'
-        where:
-        user = userService.getUserById("001")
     }
-
 }

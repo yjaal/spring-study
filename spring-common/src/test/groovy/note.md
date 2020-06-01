@@ -1246,7 +1246,6 @@ class UserServiceTest extends Specification {
     @Shared
     private UserService userService;
 
-
     @Unroll
     def "test_UserService_getUserById"() {
         expect:
@@ -1255,17 +1254,138 @@ class UserServiceTest extends Specification {
         where:
         user = userService.getUserById("001")
     }
+}
+```
+
+这样写是会报错的，`spock`中的相关语法还需要仔细研究，正确的写法如下
+
+```groovy
+package win.iot4yj.service.impl
+
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.context.SpringBootTest
+import spock.lang.Specification
+import win.iot4yj.service.UserService
+
+@SpringBootTest
+class SpockTest2 extends Specification {
+
+    @Autowired
+    private UserService userService
+
+    def "test_UserService_getUserById"() {
+        given:
+        def user = userService.getUserById("00424556")
+        expect:
+        user.name == 'yj'
+    }
 
 }
 ```
 
-正常来说是可以的，但是不知道为啥就是不行，在网上找一个例子
 
-`https://gitee.com/yawensilence/demo-spock`
 
-这个克隆下来是可以运行的。相关内容参考：
+```groovy
+package win.iot4yj.controller
 
-`https://www.baeldung.com/spring-spock-testing`
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest
+import org.springframework.test.web.servlet.MockMvc
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers
+import spock.lang.Specification
+
+@AutoConfigureMockMvc
+@WebMvcTest
+class UserControllerTest extends Specification {
+
+    @Autowired
+    MockMvc mockMvc
+
+    def "test controller"() {
+        expect: "Status is 200 and the response is 'Hello world!'"
+        mockMvc.perform(MockMvcRequestBuilders.get("/user/hello?msg=world"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andReturn()
+                .response
+                .contentAsString == "hello world"
+    }
+}
+```
+
+注意：这里不会启动容器，一般用于`controller`层的测试，但是由于这个原因可能有些类无法加载，可能需要注释掉，但是这种方式会快很多
+
+
+```java
+package win.iot4yj.controller;
+
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import io.swagger.annotations.Api;
+import org.springframework.web.bind.annotation.RestController;
+
+/**
+ * <p>
+ * 用户表 前端控制器
+ * </p>
+ *
+ * @author joyang
+ * @since 2020-05-24
+ */
+@RestController
+@RequestMapping("/user")
+@Api(value = "/user", tags = "UserController")
+public class UserController {
+
+    @GetMapping("hello")
+    public String hello(String msg) {
+        return "hello " + msg;
+    }
+}
+```
+
+
+
+注意：上面这种方式是不会启动嵌入式容器的。如果按照常规的启动容器的方式测试，则如下
+
+```groovy
+@SpringBootTest
+class LoadContextTest extends Specification {
+ 
+    @Autowired (required = false)
+    private WebController webController
+ 
+    def "when context is loaded then all expected beans are created"() {
+        expect: "the WebController is created"
+        webController
+    }
+}
+```
+
+其实这是一种集成测试了，我们不需要`MockMvc`对象，只需要
+
+```java
+@Autowired
+private TestRestTemplate restTemplate;
+```
+
+然后使用上面对象发起请求即可测试`controller`类，当然可能还需要对`service`类进行`mock`，可以使用`Mock`。
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
