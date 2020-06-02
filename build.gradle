@@ -5,6 +5,7 @@ buildscript {
         swaggerVersion = '2.9.2'
         baomidouVersion = '3.1.0'
         quartzVersion = '2.3.2'
+        powerMockVersion = '2.0.2'
     }
 
     repositories {
