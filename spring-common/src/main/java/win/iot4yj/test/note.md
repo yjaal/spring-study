@@ -714,16 +714,71 @@ public class TestUserService7Test {
     @Test
     public void check() throws Exception {
         TestUserService7 userService = spy(new TestUserService7());
+        //注意：这里如果写成when...thenReturn 就还是会调用真实对象。同时我们在调用的时候如果参数不一致也会调用真实方法
         doReturn(true).when(userService, "checkExist", "aa");
+//        when(userService, "checkExist", "aa").thenReturn(true);
         Assert.assertTrue(userService.exist("aa"));
     }
 
 }
 ```
 
-通过上面的例子我们不仅仅知道了`Spy`的用法，同时对于私有方法的`mock`也包含在内了。
+通过上面的例子我们不仅仅知道了`Spy`的用法，同时对于私有方法的`mock`也包含在内了。然后我们看下面这种情况
+
+```java
+@Test
+public void check() throws Exception {
+    TestUserService7 userService = spy(new TestUserService7());
+    doReturn(true).when(userService, "checkExist", "aa");
+    //下面这种匹配不到
+    Assert.assertTrue(userService.exist(Mockito.anyString()));
+}
+```
+
+这里在验证的时候传参为任意，这样也是匹配不到的，但是下面这种是可以的
+
+```java
+@Test
+public void check() throws Exception {
+    TestUserService7 userService = spy(new TestUserService7());
+    doReturn(true).when(userService, "checkExist", Mockito.anyString());
+    Assert.assertTrue(userService.exist("aa"));
+}
+
+//或者这样也是可以的
+@Test
+public void check() throws Exception {
+    TestUserService7 userService = spy(new TestUserService7());
+    doReturn(true).when(userService, "checkExist", Mockito.anyString());
+    Assert.assertTrue(userService.exist(Mockito.anyString()));
+}
+```
+
+同时还要注意，如果一个方法有两个参数，不能一个使用`any()`这种匹配，一种使用实际的值，如`"aa"`。
 
 
+
+在实际开发中经常遇到测试一个业务类，如`UserService`，其实现类是`UserServiceImpl`，然后我们需要验证其中的一个私有方法。这里要注意：在`@PrepareForTest`中一定要填`UserServiceImpl.class`，一般需要使用`@Autowired`注入`UserService`，然后我们在spy的时候传入这个注入的类`UserService`
+
+```java
+@Autowired
+private Userservice userService;
+
+@Test
+public void xxx(){
+    UserServiceImpl userServiceImpl = spy(userService);
+}
+```
+
+当然如果只是测试公共方法，那么就可以直接使用注入的`userService`。而一般在UserServiceImpl类中会使用注入，注入一些需要的类，而在测试的时候这些类我们`mock`之后需要替换掉，此时需要使用
+
+```java
+Whitebox.setInternalState(userService, xxxService, xxxMapper);
+```
+
+
+
+最后一定要注意：`doReturn(...).when(...) `和 `when(...).thenReturn(...)` 是不同的，如果出错可以检查下。
 
 
 

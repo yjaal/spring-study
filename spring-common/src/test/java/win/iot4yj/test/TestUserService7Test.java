@@ -3,10 +3,12 @@ package win.iot4yj.test;
 import static org.powermock.api.mockito.PowerMockito.doNothing;
 import static org.powermock.api.mockito.PowerMockito.doReturn;
 import static org.powermock.api.mockito.PowerMockito.spy;
+import static org.powermock.api.mockito.PowerMockito.when;
 
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.powermock.api.mockito.PowerMockito;
 import org.powermock.core.classloader.annotations.PowerMockIgnore;
 import org.powermock.core.classloader.annotations.PrepareForTest;
@@ -47,8 +49,10 @@ public class TestUserService7Test {
     @Test
     public void check() throws Exception {
         TestUserService7 userService = spy(new TestUserService7());
-        doReturn(true).when(userService, "checkExist", "aa");
-        Assert.assertTrue(userService.exist("aa"));
+        //注意：这里如果写成when...thenReturn 就还是会调用真实对象。同时我们在调用的时候如果参数不一致也会调用真实方法
+        doReturn(true).when(userService, "checkExist", Mockito.anyString());
+//        when(userService, "checkExist", "aa").thenReturn(true);
+        Assert.assertTrue(userService.exist(Mockito.anyString()));
     }
 
 }
