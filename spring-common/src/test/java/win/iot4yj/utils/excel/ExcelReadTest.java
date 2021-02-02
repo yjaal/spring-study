@@ -2,10 +2,14 @@ package win.iot4yj.utils.excel;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.time.DateTimeException;
+import java.util.HashMap;
+import java.util.Map;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFDateUtil;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -143,4 +147,66 @@ public class ExcelReadTest {
         }
         in.close();
     }
+
+
+    @Test
+    public void readCardBin() throws Exception {
+
+        Map<String, String> bankNoMap = new HashMap<>(16);
+        bankNoMap.put("工商银行","102100099996");
+        bankNoMap.put("农业银行","103100000026");
+        bankNoMap.put("中国银行","104100000004");
+        bankNoMap.put("建设银行","105100000017");
+        bankNoMap.put("交通银行","301290000007");
+        bankNoMap.put("兴业银行","309391000011");
+        bankNoMap.put("光大银行","303100000006");
+        bankNoMap.put("浦发银行","310290000013");
+        bankNoMap.put("平安银行","313584099990");
+        bankNoMap.put("广发银行","306581000003");
+        bankNoMap.put("华夏银行","304100040000");
+        bankNoMap.put("中信银行","302100011000");
+        bankNoMap.put("邮储银行","403100000004");
+
+        FileInputStream in = new FileInputStream("./cardbin.xls");
+        Workbook excel03 = new HSSFWorkbook(in);
+        Sheet sheet1 = excel03.getSheet("sheet3");
+
+        FileOutputStream out = new FileOutputStream("./carbin_rdcn.sql");
+
+        //获取内容
+        int rowCount = sheet1.getPhysicalNumberOfRows();
+        int rowSum = 0;
+        for (int rowNum = 0; rowNum < rowCount; rowNum++) {
+            rowSum++;
+            Row rowData = sheet1.getRow(rowNum);
+            if (null != rowData) {
+
+                Cell cellCardBin = rowData.getCell(13);
+                String cardBin = cellCardBin.getStringCellValue();
+
+                Cell cellLength = rowData.getCell(12);
+                int cardBinLength = Integer.parseInt(cellLength.getStringCellValue());
+
+                Cell cellName = rowData.getCell(17);
+                String bankName = cellName.getStringCellValue();
+
+                String clearBankNo = bankNoMap.get(bankName);
+                if (StringUtils.isEmpty(clearBankNo)) {
+                    System.out.println("银行名称：" + bankName);
+                    return;
+                }
+
+                String sql = "INSERT INTO wfts_fcts_cardbin_info (card_bin,bank_name,card_bin_length,card_type,clear_bank_no,webank_code,"
+                    + "status,prodcut_type,cooper_branch_code,create_time,update_time) VALUES "
+                    + "('" + cardBin + "','" + bankName + "'," + cardBinLength + ",'1','" + clearBankNo
+                    + "','',NULL,'100000','100000',now(),now());\n";
+
+
+                out.write(sql.getBytes());
+            }
+        }
+        System.out.println("总行数：" + rowSum);
+        in.close();
+    }
+
 }
