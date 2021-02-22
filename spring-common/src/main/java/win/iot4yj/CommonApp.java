@@ -9,7 +9,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
  * 参考：https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/#using-boot-starter
  */
 @SpringBootApplication
-//启动定时任务
 @EnableScheduling
 public class CommonApp {
 

@@ -53,7 +53,7 @@ public class MyGenerator {
     private static final String OUTPUT_DIR = System.getProperty("user.dir") + "/src/main/java";
 
     //数据库配置
-    private static final String DB_URL = "jdbc:mysql://localhost:13306/spring_study?characterEncoding=utf8";
+    private static final String DB_URL = "jdbc:mysql://localhost:13306/spring_study?serverTimezone=UTC&characterEncoding=utf8";
     private static final String DB_DRIVER = "com.mysql.jdbc.Driver";
     private static final String DB_USERNAME = "root";
     private static final String DB_PASSWORD = "walp1314";

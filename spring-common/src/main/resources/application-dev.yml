@@ -16,7 +16,7 @@ logging:
 spring:
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/spring_study?characterEncoding=utf8
+    url: jdbc:mysql://localhost:3306/spring_study?serverTimezone=UTC&characterEncoding=utf8
     username: root
     password: walp1314
     type: com.alibaba.druid.pool.DruidDataSource

@@ -54,6 +54,7 @@ subprojects {
         //此包中包含了spring-boot-starter
         //implementation "org.springframework.boot:spring-boot-starter-thymeleaf:${springBootVersion}"
         compile 'com.google.guava:guava:28.0-jre'
+        compile 'commons-net:commons-net:3.7.2'
         compile group: 'joda-time', name: 'joda-time', version: '2.10.6'
         annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
         compileOnly "org.projectlombok:lombok:${lombokVersion}"
