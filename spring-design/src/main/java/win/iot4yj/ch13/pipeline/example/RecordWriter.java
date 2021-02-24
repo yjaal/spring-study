@@ -27,8 +27,8 @@ import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.github.viscent.util.Debug;
-import io.github.viscent.util.Tools;
+import win.iot4yj.utils.Debug;
+import win.iot4yj.utils.Tools;
 
 public class RecordWriter {
 
@@ -65,8 +65,7 @@ public class RecordWriter {
         return INSTANCE;
     }
 
-    public File write(Record[] records, int targetFileIndex)
-            throws IOException {
+    public File write(Record[] records, int targetFileIndex) throws IOException {
         if (null == records || 0 == records.length) {
             throw new IllegalArgumentException("records is null or empty");
         }
@@ -75,8 +74,7 @@ public class RecordWriter {
 
         String recordDay;
 
-        recordDay = DIRECTORY_NAME_FORMATTER
-                .format(records[0].getOperationTime());
+        recordDay = DIRECTORY_NAME_FORMATTER.format(records[0].getOperationTime());
 
         String fileKey = recordDay + '-' + targetFileIndex;
 
@@ -100,7 +98,7 @@ public class RecordWriter {
         for (Record record : records) {
             i++;
 
-            pwr.print(String.valueOf(record.getId()));
+            pwr.print(record.getId());
             pwr.print(FIELD_SEPARATOR);
             pwr.print(record.getMsisdn());
             pwr.print(FIELD_SEPARATOR);
@@ -109,7 +107,7 @@ public class RecordWriter {
 
             pwr.print(record.getPackageId());
             pwr.print(FIELD_SEPARATOR);
-            pwr.print(String.valueOf(record.getOperationType()));
+            pwr.print(record.getOperationType());
             pwr.print(FIELD_SEPARATOR);
 
             strBuf.delete(0, 40);

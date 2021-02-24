@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 
-import io.github.viscent.mtpattern.ch6.promise.example.FTPUploader;
+import win.iot4yj.ch6.promise.example.FTPUploader;
 
 public class FileTransferTask implements Callable<File> {
     public final Future<FTPUploader> ftpUtilHodler;

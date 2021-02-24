@@ -11,31 +11,20 @@ https://github.com/Viscent/javamtp
 http://www.broadview.com.cn/38245
 */
 
-package win.iot4yj.ch13.pipeline.example;
+package win.iot4yj.ch5.tpt.example;
 
-public class Config {
+public enum AlarmType {
 
-    public static int MAX_RECORDS_PER_FILE = 5000;
+    FAULT("fault"), RESUME("resume");
 
-    /**
-     * RECORD_SAVE_CHUNK_SIZE should be less than RECORD_JOIN_SIZE
-     */
-    public static int RECORD_SAVE_CHUNK_SIZE = 350;
+    private final String name;
 
-    public static int WRITER_BUFFER_SIZE = 8192 * 10;
+    private AlarmType(String name) {
+        this.name = name;
+    }
 
-    /**
-     * RECORD_JOIN_SIZE should be about WRITER_BUFFER_SIZE/103
-     * <p>此值不能过小，过小会导致内存消耗过大 =8196/101
-     */
-    public static int RECORD_JOIN_SIZE = 700;
-
-    /*
-     * CPU<40%
-     *
-     * public static int RECORD_SAVE_CHUNK_SIZE=100;
-     *
-     * public static int RECORD_JOIN_SIZE=300;
-     */
-
+    @Override
+    public String toString() {
+        return name;
+    }
 }

@@ -11,31 +11,28 @@ https://github.com/Viscent/javamtp
 http://www.broadview.com.cn/38245
 */
 
-package win.iot4yj.ch13.pipeline.example;
+package win.iot4yj.ch9.threadpool.example;
 
-public class Config {
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.ThreadPoolExecutor;
 
-    public static int MAX_RECORDS_PER_FILE = 5000;
+/**
+ * 该线程池饱和处理策略支持将提交失败的任务重新放入线程池工作队列。
+ *
+ * @author Viscent Huang
+ */
+public class ReEnqueueRejectedExecutionHandler implements RejectedExecutionHandler {
 
-    /**
-     * RECORD_SAVE_CHUNK_SIZE should be less than RECORD_JOIN_SIZE
-     */
-    public static int RECORD_SAVE_CHUNK_SIZE = 350;
-
-    public static int WRITER_BUFFER_SIZE = 8192 * 10;
-
-    /**
-     * RECORD_JOIN_SIZE should be about WRITER_BUFFER_SIZE/103
-     * <p>此值不能过小，过小会导致内存消耗过大 =8196/101
-     */
-    public static int RECORD_JOIN_SIZE = 700;
-
-    /*
-     * CPU<40%
-     *
-     * public static int RECORD_SAVE_CHUNK_SIZE=100;
-     *
-     * public static int RECORD_JOIN_SIZE=300;
-     */
+    @Override
+    public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
+        if (executor.isShutdown()) {
+            return;
+        }
+        try {
+            executor.getQueue().put(r);
+        } catch (InterruptedException e) {
+            ;
+        }
+    }
 
 }

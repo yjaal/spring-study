@@ -18,30 +18,24 @@ import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadFactory;
 import java.util.concurrent.TimeUnit;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import org.apache.log4j.Logger;
 
-public class SimplePipeline<T, OUT> extends AbstractPipe<T, OUT> implements
-        Pipeline<T, OUT> {
-    private final static Logger logger = Logger.getLogger(SimplePipeline.class);
+public class SimplePipeline<T, OUT> extends AbstractPipe<T, OUT> implements Pipeline<T, OUT> {
+
+    private static final Logger log = LoggerFactory.getLogger(SimplePipeline.class);
     private final Queue<Pipe<?, ?>> pipes = new LinkedList<Pipe<?, ?>>();
 
     private final ExecutorService helperExecutor;
 
     public SimplePipeline() {
-        this(Executors.newSingleThreadExecutor(new ThreadFactory() {
-
-            @Override
-            public Thread newThread(Runnable r) {
-                Thread t = new Thread(r, "SimplePipeline-Helper");
-                t.setDaemon(true);
-                return t;
-            }
-
+        this(Executors.newSingleThreadExecutor(r -> {
+            Thread t = new Thread(r, "SimplePipeline-Helper");
+            t.setDaemon(true);
+            return t;
         }));
-
     }
 
     public SimplePipeline(final ExecutorService helperExecutor) {
@@ -58,7 +52,6 @@ public class SimplePipeline<T, OUT> extends AbstractPipe<T, OUT> implements
         }
 
         helperExecutor.shutdown();
-
     }
 
     @Override
@@ -69,21 +62,20 @@ public class SimplePipeline<T, OUT> extends AbstractPipe<T, OUT> implements
 
     @Override
     public void addPipe(Pipe<?, ?> pipe) {
-
         // Pipe间的关联关系在init方法中建立
         pipes.add(pipe);
     }
 
     public <INPUT, OUTPUT> void addAsWorkerThreadBasedPipe(
-            Pipe<INPUT, OUTPUT> delegate, int workerCount) {
+        Pipe<INPUT, OUTPUT> delegate, int workerCount) {
         addPipe(new WorkerThreadPipeDecorator<INPUT, OUTPUT>(delegate,
-                workerCount));
+            workerCount));
     }
 
     public <INPUT, OUTPUT> void addAsThreadPoolBasedPipe(
-            Pipe<INPUT, OUTPUT> delegate, ExecutorService executorSerivce) {
+        Pipe<INPUT, OUTPUT> delegate, ExecutorService executorSerivce) {
         addPipe(new ThreadPoolPipeDecorator<INPUT, OUTPUT>(delegate,
-                executorSerivce));
+            executorSerivce));
     }
 
     @Override
@@ -94,7 +86,7 @@ public class SimplePipeline<T, OUT> extends AbstractPipe<T, OUT> implements
         firstPipe.process(input);
     }
 
-    @SuppressWarnings({ "rawtypes", "unchecked" })
+    @SuppressWarnings({"rawtypes", "unchecked"})
     @Override
     public void init(final PipeContext ctx) {
         LinkedList<Pipe<?, ?>> pipesList = (LinkedList<Pipe<?, ?>>) pipes;
@@ -107,6 +99,7 @@ public class SimplePipeline<T, OUT> extends AbstractPipe<T, OUT> implements
     }
 
     static class PipeInitTask implements Runnable {
+
         final List<Pipe<?, ?>> pipes;
         final PipeContext ctx;
 
@@ -122,7 +115,7 @@ public class SimplePipeline<T, OUT> extends AbstractPipe<T, OUT> implements
                     pipe.init(ctx);
                 }
             } catch (Exception e) {
-                logger.error("Failed to init pipe", e);
+                log.error("Failed to init pipe", e);
             }
         }
 
@@ -135,7 +128,7 @@ public class SimplePipeline<T, OUT> extends AbstractPipe<T, OUT> implements
                 helperExecutor.submit(new Runnable() {
                     @Override
                     public void run() {
-                        logger.error("", exp);
+                        log.error("", exp);
                     }
                 });
             }

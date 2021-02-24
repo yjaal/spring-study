@@ -29,18 +29,19 @@ import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import io.github.viscent.mtpattern.ch13.pipeline.AbstractParallelPipe;
-import io.github.viscent.mtpattern.ch13.pipeline.AbstractPipe;
-import io.github.viscent.mtpattern.ch13.pipeline.Pipe;
-import io.github.viscent.mtpattern.ch13.pipeline.PipeContext;
-import io.github.viscent.mtpattern.ch13.pipeline.PipeException;
-import io.github.viscent.mtpattern.ch13.pipeline.Pipeline;
-import io.github.viscent.mtpattern.ch13.pipeline.SimplePipeline;
-import io.github.viscent.mtpattern.ch6.promise.example.FTPUploader;
-import io.github.viscent.mtpattern.ch6.promise.example.FTPUploaderPromisor;
-import io.github.viscent.mtpattern.ch9.threadpool.example.ReEnqueueRejectedExecutionHandler;
+import win.iot4yj.ch13.pipeline.AbstractParallelPipe;
+import win.iot4yj.ch13.pipeline.AbstractPipe;
+import win.iot4yj.ch13.pipeline.Pipe;
+import win.iot4yj.ch13.pipeline.PipeContext;
+import win.iot4yj.ch13.pipeline.PipeException;
+import win.iot4yj.ch13.pipeline.Pipeline;
+import win.iot4yj.ch13.pipeline.SimplePipeline;
+import win.iot4yj.ch6.promise.example.FTPUploader;
+import win.iot4yj.ch6.promise.example.FTPUploaderPromisor;
+import win.iot4yj.ch9.threadpool.example.ReEnqueueRejectedExecutionHandler;
 
 public class DataSyncTask implements Runnable {
+
     private final Properties config;
 
     public DataSyncTask(Properties config) {
@@ -70,7 +71,7 @@ public class DataSyncTask implements Runnable {
     }
 
     protected RecordSource makeRecordSource(Properties config)
-            throws Exception {
+        throws Exception {
         // DbRecordSource类的源码见本书的配套下载
         return new DbRecordSource(config);
     }
@@ -81,14 +82,12 @@ public class DataSyncTask implements Runnable {
          * 这里，各个Pipe的初始化话完全可以在上游Pipe初始化完毕后再初始化其后继Pipe，而不必多个Pipe同时初始化。
          * 因此，这个初始化的动作可以由一个线程来处理。该线程处理完各个Pipe的初始化后，可以继续处理之后可能产生的任务， 如错误处理。
          * 所以，上述这些先后产生的任务可以由线程池中的一个工作者线程从头到尾负责执行。
-         * 
+         *
          * 由于这里的几个Pipe都是处理I/O的，为了避免使用锁（以减少不必要的上下文切换） 但又能保证线程安全，故每个Pipe都采用单线程处理。
          * 若各个Pipe要改用线程池来处理，需要注意：1）线程安全 2）死锁
          */
-        final ExecutorService helperExecutor =
-                Executors.newSingleThreadExecutor();
-        final SimplePipeline<RecordSaveTask, String> pipeline =
-                new SimplePipeline<>(helperExecutor);
+        final ExecutorService helperExecutor = Executors.newSingleThreadExecutor();
+        final SimplePipeline<RecordSaveTask, String> pipeline = new SimplePipeline<>(helperExecutor);
 
         /*
          * 根据数据库记录生成相应的数据文件。 Pipe接口的源码参见清单13-3。
@@ -114,7 +113,7 @@ public class DataSyncTask implements Runnable {
 
             @Override
             protected File doProcess(RecordSaveTask task)
-                    throws PipeException {
+                throws PipeException {
                 /*
                  * 将记录写入文件。 RecordSaveTask类的源码参见本书配套下载。
                  */
@@ -122,15 +121,12 @@ public class DataSyncTask implements Runnable {
                 final RecordWriter recordWriter = RecordWriter.getInstance();
                 final Record[] records = task.records;
                 if (null == records) {
-                    file = recordWriter.finishRecords(task.recordDay,
-                            task.targetFileIndex);
+                    file = recordWriter.finishRecords(task.recordDay, task.targetFileIndex);
                 } else {
                     try {
-                        file = recordWriter.write(records,
-                                task.targetFileIndex);
+                        file = recordWriter.write(records, task.targetFileIndex);
                     } catch (IOException e) {
-                        throw new PipeException(this, task,
-                                "Failed to save records.", e);
+                        throw new PipeException(this, task, "Failed to save records.", e);
                     }
                 }
                 return file;
@@ -144,18 +140,18 @@ public class DataSyncTask implements Runnable {
         final String[][] ftpServerConfigs = retrieveFTPServConf();
 
         final ThreadPoolExecutor ftpExecutorService = new ThreadPoolExecutor(1,
-                ftpServerConfigs.length, 60, TimeUnit.SECONDS,
-                new ArrayBlockingQueue<Runnable>(100),
-                new ReEnqueueRejectedExecutionHandler());
+            ftpServerConfigs.length, 60, TimeUnit.SECONDS,
+            new ArrayBlockingQueue<Runnable>(100),
+            new ReEnqueueRejectedExecutionHandler());
 
         final String ftpServerDir = this.config.getProperty("ftp.serverdir");
 
         // AbstractParallelPipe类的源码参见清单13-7
         ret = new AbstractParallelPipe<File, File, File>(
-                        new SynchronousQueue<File>(), ftpExecutorService) {
+            new SynchronousQueue<File>(), ftpExecutorService) {
             @SuppressWarnings("unchecked")
-                    final Future<FTPUploader>[] ftpClientUtilHolders =
-                            new Future[ftpServerConfigs.length];
+            final Future<FTPUploader>[] ftpClientUtilHolders =
+                new Future[ftpServerConfigs.length];
 
             @Override
             public void init(PipeContext pipeCtx) {
@@ -163,11 +159,11 @@ public class DataSyncTask implements Runnable {
                 String[] ftpServerConfig;
                 for (int i = 0; i < ftpServerConfigs.length; i++) {
                     ftpServerConfig = ftpServerConfigs[i];
-                            // FTPUploaderPromisor类的源码参见清单6-2
-                            ftpClientUtilHolders[i] =
-                                    FTPUploaderPromisor.newFTPUploaderPromise(
-                                            ftpServerConfig[0],
-                                            ftpServerConfig[1],
+                    // FTPUploaderPromisor类的源码参见清单6-2
+                    ftpClientUtilHolders[i] =
+                        FTPUploaderPromisor.newFTPUploaderPromise(
+                            ftpServerConfig[0],
+                            ftpServerConfig[1],
                             ftpServerConfig[2], ftpServerDir,
                             ftpExecutorService);
                 }
@@ -175,10 +171,9 @@ public class DataSyncTask implements Runnable {
 
             @Override
             protected List<Callable<File>> buildTasks(final File file) {
-                        // 创建一组并发任务，这些任务将指定的文件上传到FTP服务器上
-                        List<Callable<File>> tasks = new LinkedList<>();
-                for (Future<FTPUploader> ftpClientUtilHolder 
-                        : ftpClientUtilHolders) {
+                // 创建一组并发任务，这些任务将指定的文件上传到FTP服务器上
+                List<Callable<File>> tasks = new LinkedList<>();
+                for (Future<FTPUploader> ftpClientUtilHolder : ftpClientUtilHolders) {
                     tasks.add(new FileTransferTask(ftpClientUtilHolder, file));
                 }
                 return tasks;
@@ -186,7 +181,7 @@ public class DataSyncTask implements Runnable {
 
             @Override
             protected File combineResults(List<Future<File>> subTaskResults)
-                    throws Exception {
+                throws Exception {
                 if (0 == subTaskResults.size()) {
                     return null;
                 }
@@ -203,8 +198,8 @@ public class DataSyncTask implements Runnable {
                 } catch (InterruptedException e1) {
                     ;
                 }
-                for (Future<FTPUploader> ftpClientUtilHolder 
-                        : ftpClientUtilHolders) {
+                for (Future<FTPUploader> ftpClientUtilHolder
+                    : ftpClientUtilHolders) {
                     try {
                         ftpClientUtilHolder.get().disconnect();
                     } catch (Exception e) {
@@ -221,7 +216,7 @@ public class DataSyncTask implements Runnable {
         ret = new AbstractPipe<File, Void>() {
             @Override
             protected Void doProcess(File transferedFile)
-                    throws PipeException {
+                throws PipeException {
                 // 备份已传输完毕的文件
                 RecordWriter.backupFile(transferedFile);
                 return null;
@@ -250,7 +245,7 @@ public class DataSyncTask implements Runnable {
     }
 
     private void processRecords(RecordSource recordSource,
-            Pipeline<RecordSaveTask, String> pipeline) throws Exception {
+        Pipeline<RecordSaveTask, String> pipeline) throws Exception {
         Record record;
         Record[] records = new Record[Config.RECORD_SAVE_CHUNK_SIZE];
         int targetFileIndex = 0;
@@ -273,11 +268,11 @@ public class DataSyncTask implements Runnable {
                 if (null != lastRecordDay) {
                     if (recordCountInTheFile >= 1) {
                         pipeline.process(new RecordSaveTask(
-                                Arrays.copyOf(records, recordCountInTheFile),
-                                targetFileIndex));
+                            Arrays.copyOf(records, recordCountInTheFile),
+                            targetFileIndex));
                     } else {
                         pipeline.process(new RecordSaveTask(lastRecordDay,
-                                targetFileIndex));
+                            targetFileIndex));
                     }
 
                     // 在此之前，先将records中的内容写入文件
@@ -293,25 +288,25 @@ public class DataSyncTask implements Runnable {
             if (nextTargetFileIndex == targetFileIndex) {
                 recordCountInTheFile++;
                 if (0 == (recordCountInTheFile
-                        % Config.RECORD_SAVE_CHUNK_SIZE)) {
+                    % Config.RECORD_SAVE_CHUNK_SIZE)) {
                     pipeline.process(new RecordSaveTask(
-                            Arrays.copyOf(records, recordCountInTheFile),
-                            targetFileIndex));
+                        Arrays.copyOf(records, recordCountInTheFile),
+                        targetFileIndex));
                     recordCountInTheFile = 0;
                 }
             }
 
             nextTargetFileIndex = (recordCountInTheDay)
-                    / Config.MAX_RECORDS_PER_FILE;
+                / Config.MAX_RECORDS_PER_FILE;
             if (nextTargetFileIndex > targetFileIndex) {
                 // 预测到将发生同日期记录文件切换
                 if (recordCountInTheFile > 1) {
                     pipeline.process(new RecordSaveTask(
-                            Arrays.copyOf(records, recordCountInTheFile),
-                            targetFileIndex));
+                        Arrays.copyOf(records, recordCountInTheFile),
+                        targetFileIndex));
                 } else {
                     pipeline.process(
-                            new RecordSaveTask(recordDay, targetFileIndex));
+                        new RecordSaveTask(recordDay, targetFileIndex));
                 }
                 recordCountInTheFile = 0;
                 targetFileIndex = nextTargetFileIndex;
@@ -323,8 +318,8 @@ public class DataSyncTask implements Runnable {
 
         if (recordCountInTheFile > 0) {
             pipeline.process(new RecordSaveTask(
-                    Arrays.copyOf(records, recordCountInTheFile),
-                    targetFileIndex));
+                Arrays.copyOf(records, recordCountInTheFile),
+                targetFileIndex));
         }
     }
 }

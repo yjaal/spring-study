@@ -1,7 +1,7 @@
 dependencies {
 
     // 依赖其他工程模块
-    implementation project(':spring-common')
+    compile project(':spring-common')
 
     //数据库连接池
     compile group: 'com.alibaba', name: 'druid', version: '1.1.22'

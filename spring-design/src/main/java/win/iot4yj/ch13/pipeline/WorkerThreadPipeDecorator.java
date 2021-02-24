@@ -19,23 +19,20 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.TimeUnit;
 
-import io.github.viscent.mtpattern.ch5.tpt.AbstractTerminatableThread;
-import io.github.viscent.mtpattern.ch5.tpt.TerminationToken;
+import win.iot4yj.ch5.tpt.AbstractTerminatableThread;
+import win.iot4yj.ch5.tpt.TerminationToken;
 
 /**
- * 基于工作者线程的Pipe实现类。 提交到该Pipe的任务由指定个数的工作者线程共同处理。 该类使用了Two-phase
- * Termination模式（参见第5章）。
- * 
- * @author Viscent Huang
+ * 基于工作者线程的Pipe实现类。 提交到该Pipe的任务由指定个数的工作者线程共同处理。 该类使用了Two-phase Termination模式（参见第5章）。
  *
- * @param <IN>
- *            输入类型
- * @param <OUT>
- *            输出类型
+ * @param <IN>  输入类型
+ * @param <OUT> 输出类型
+ * @author Viscent Huang
  */
 public class WorkerThreadPipeDecorator<IN, OUT> implements Pipe<IN, OUT> {
+
     protected final BlockingQueue<IN> workQueue;
-    private final Set<AbstractTerminatableThread> workerThreads = new HashSet<AbstractTerminatableThread>();
+    private final Set<AbstractTerminatableThread> workerThreads = new HashSet<>();
     private final TerminationToken terminationToken = new TerminationToken();
 
     private final Pipe<IN, OUT> delegate;
@@ -44,11 +41,9 @@ public class WorkerThreadPipeDecorator<IN, OUT> implements Pipe<IN, OUT> {
         this(new SynchronousQueue<IN>(), delegate, workerCount);
     }
 
-    public WorkerThreadPipeDecorator(BlockingQueue<IN> workQueue,
-            Pipe<IN, OUT> delegate, int workerCount) {
+    public WorkerThreadPipeDecorator(BlockingQueue<IN> workQueue, Pipe<IN, OUT> delegate, int workerCount) {
         if (workerCount <= 0) {
-            throw new IllegalArgumentException(
-                    "workerCount should be positive!");
+            throw new IllegalArgumentException("workerCount should be positive!");
         }
 
         this.workQueue = workQueue;
@@ -104,5 +99,4 @@ public class WorkerThreadPipeDecorator<IN, OUT> implements Pipe<IN, OUT> {
     public void setNextPipe(Pipe<?, ?> nextPipe) {
         delegate.setNextPipe(nextPipe);
     }
-
 }
