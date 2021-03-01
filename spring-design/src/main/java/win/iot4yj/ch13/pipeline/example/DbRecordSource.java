@@ -10,18 +10,19 @@ import java.sql.Statement;
 import java.util.Properties;
 
 public class DbRecordSource implements RecordSource {
+
     private final ResultSet rs;
 
     public DbRecordSource(Properties config) throws Exception {
         Connection cnn = getConnection(config);
         this.rs = qryRecords(cnn);
     }
-    
+
 
     @Override
     public void close() throws IOException {
         try (Statement stmt = rs.getStatement();
-                Connection cnn = stmt.getConnection();) {
+            Connection cnn = stmt.getConnection();) {
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -55,9 +56,9 @@ public class DbRecordSource implements RecordSource {
     private ResultSet qryRecords(Connection dbConn) throws Exception {
         dbConn.setReadOnly(true);
         PreparedStatement ps = dbConn.prepareStatement(
-                "select id,productId,packageId,msisdn,operationTime,operationType,"
-                        + "effectiveDate,dueDate from subscriptions order by operationTime",
-                ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
+            "select id,productId,packageId,msisdn,operationTime,operationType,"
+                + "effectiveDate,dueDate from subscriptions order by operationTime",
+            ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY);
         ResultSet rs = ps.executeQuery();
         return rs;
     }
@@ -65,8 +66,8 @@ public class DbRecordSource implements RecordSource {
     protected Connection getConnection(Properties props) throws Exception {
         Connection dbConn = null;
         dbConn = DriverManager.getConnection(props.getProperty("jdbc.url"),
-                props.getProperty("jdbc.username"),
-                props.getProperty("jdbc.password"));
+            props.getProperty("jdbc.username"),
+            props.getProperty("jdbc.password"));
         return dbConn;
     }
 

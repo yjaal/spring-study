@@ -70,12 +70,14 @@ public class DataSyncTask implements Runnable {
         pipeline.shutdown(360, TimeUnit.SECONDS);
     }
 
-    protected RecordSource makeRecordSource(Properties config)
-        throws Exception {
+    protected RecordSource makeRecordSource(Properties config) throws Exception {
         // DbRecordSource类的源码见本书的配套下载
         return new DbRecordSource(config);
     }
 
+    /**
+     * 创建三个pipe：stageSaveFile, stageTransferFile,stageBackupFile
+     */
     private SimplePipeline<RecordSaveTask, String> buildPipeline() {
         /*
          * 线程池的本质是重复利用一定数量的线程，而不是针对每个任务都有一个专门的工作者线程。
@@ -244,8 +246,7 @@ public class DataSyncTask implements Runnable {
         return ftpServerConfigs;
     }
 
-    private void processRecords(RecordSource recordSource,
-        Pipeline<RecordSaveTask, String> pipeline) throws Exception {
+    private void processRecords(RecordSource recordSource, Pipeline<RecordSaveTask, String> pipeline) throws Exception {
         Record record;
         Record[] records = new Record[Config.RECORD_SAVE_CHUNK_SIZE];
         int targetFileIndex = 0;
@@ -267,12 +268,9 @@ public class DataSyncTask implements Runnable {
                 // 实际已发生的不同日期记录文件切换
                 if (null != lastRecordDay) {
                     if (recordCountInTheFile >= 1) {
-                        pipeline.process(new RecordSaveTask(
-                            Arrays.copyOf(records, recordCountInTheFile),
-                            targetFileIndex));
+                        pipeline.process(new RecordSaveTask(Arrays.copyOf(records, recordCountInTheFile), targetFileIndex));
                     } else {
-                        pipeline.process(new RecordSaveTask(lastRecordDay,
-                            targetFileIndex));
+                        pipeline.process(new RecordSaveTask(lastRecordDay, targetFileIndex));
                     }
 
                     // 在此之前，先将records中的内容写入文件

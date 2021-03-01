@@ -38,7 +38,7 @@ public class WorkerThreadPipeDecorator<IN, OUT> implements Pipe<IN, OUT> {
     private final Pipe<IN, OUT> delegate;
 
     public WorkerThreadPipeDecorator(Pipe<IN, OUT> delegate, int workerCount) {
-        this(new SynchronousQueue<IN>(), delegate, workerCount);
+        this(new SynchronousQueue<>(), delegate, workerCount);
     }
 
     public WorkerThreadPipeDecorator(BlockingQueue<IN> workQueue, Pipe<IN, OUT> delegate, int workerCount) {

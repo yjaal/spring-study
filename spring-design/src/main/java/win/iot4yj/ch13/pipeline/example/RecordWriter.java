@@ -154,8 +154,7 @@ public class RecordWriter {
         if (null != pwr) {
             pwr.flush();
             pwr.close();
-            file = new File(baseDir + '/' + recordDay + "/subspsync-gw-"
-                    + FILE_INDEX_FORMATTER.format(targetFileIndex) + ".dat");
+            file = new File(baseDir + '/' + recordDay + "/subspsync-gw-" + FILE_INDEX_FORMATTER.format(targetFileIndex) + ".dat");
             printWriterMap.remove(fileKey);
         }
         return file;

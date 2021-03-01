@@ -66,10 +66,8 @@ public class SimplePipeline<T, OUT> extends AbstractPipe<T, OUT> implements Pipe
         pipes.add(pipe);
     }
 
-    public <INPUT, OUTPUT> void addAsWorkerThreadBasedPipe(
-        Pipe<INPUT, OUTPUT> delegate, int workerCount) {
-        addPipe(new WorkerThreadPipeDecorator<INPUT, OUTPUT>(delegate,
-            workerCount));
+    public <INPUT, OUTPUT> void addAsWorkerThreadBasedPipe(Pipe<INPUT, OUTPUT> delegate, int workerCount) {
+        addPipe(new WorkerThreadPipeDecorator<>(delegate, workerCount));
     }
 
     public <INPUT, OUTPUT> void addAsThreadPoolBasedPipe(
@@ -78,6 +76,9 @@ public class SimplePipeline<T, OUT> extends AbstractPipe<T, OUT> implements Pipe
             executorSerivce));
     }
 
+    /**
+     * 启动此pipeline
+     */
     @Override
     public void process(T input) throws InterruptedException {
         @SuppressWarnings("unchecked")
@@ -122,17 +123,6 @@ public class SimplePipeline<T, OUT> extends AbstractPipe<T, OUT> implements Pipe
     }
 
     public PipeContext newDefaultPipelineContext() {
-        return new PipeContext() {
-            @Override
-            public void handleError(final PipeException exp) {
-                helperExecutor.submit(new Runnable() {
-                    @Override
-                    public void run() {
-                        log.error("", exp);
-                    }
-                });
-            }
-
-        };
+        return exp -> helperExecutor.submit(() -> log.error("", exp));
     }
 }
