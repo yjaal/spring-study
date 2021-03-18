@@ -28,7 +28,6 @@ import java.util.concurrent.Future;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
 import win.iot4yj.ch13.pipeline.AbstractParallelPipe;
 import win.iot4yj.ch13.pipeline.AbstractPipe;
 import win.iot4yj.ch13.pipeline.Pipe;
@@ -294,8 +293,7 @@ public class DataSyncTask implements Runnable {
                 }
             }
 
-            nextTargetFileIndex = (recordCountInTheDay)
-                / Config.MAX_RECORDS_PER_FILE;
+            nextTargetFileIndex = (recordCountInTheDay) / Config.MAX_RECORDS_PER_FILE;
             if (nextTargetFileIndex > targetFileIndex) {
                 // 预测到将发生同日期记录文件切换
                 if (recordCountInTheFile > 1) {
