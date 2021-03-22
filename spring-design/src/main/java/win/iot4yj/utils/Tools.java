@@ -19,7 +19,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Field;
 import java.math.BigInteger;
 import java.net.URL;
 import java.nio.file.Files;
@@ -38,8 +37,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
-
-import sun.misc.Unsafe;
 
 public final class Tools {
 
@@ -100,16 +97,16 @@ public final class Tools {
         }
     }
 
-    public static Unsafe getUnsafe() {
-        try {
-            Field f = Unsafe.class.getDeclaredField("theUnsafe");
-            f.setAccessible(true);
-            return (Unsafe) f.get(null);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+//    public static Unsafe getUnsafe() {
+//        try {
+//            Field f = Unsafe.class.getDeclaredField("theUnsafe");
+//            f.setAccessible(true);
+//            return (Unsafe) f.get(null);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return null;
+//    }
 
     public static void silentClose(Closeable... closeable) {
         if (null == closeable) {

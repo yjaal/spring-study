@@ -31,8 +31,7 @@ public abstract class AbstractParallelPipe<IN, OUT, V> extends AbstractPipe<IN, 
 
     private final ExecutorService executorService;
 
-    public AbstractParallelPipe(BlockingQueue<IN> queue,
-        ExecutorService executorService) {
+    public AbstractParallelPipe(BlockingQueue<IN> queue, ExecutorService executorService) {
         super();
         this.executorService = executorService;
     }

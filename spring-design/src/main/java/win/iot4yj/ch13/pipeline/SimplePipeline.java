@@ -28,6 +28,9 @@ public class SimplePipeline<T, OUT> extends AbstractPipe<T, OUT> implements Pipe
     private static final Logger log = LoggerFactory.getLogger(SimplePipeline.class);
     private final Queue<Pipe<?, ?>> pipes = new LinkedList<Pipe<?, ?>>();
 
+    /**
+     * 用于处理异常情况
+     */
     private final ExecutorService helperExecutor;
 
     public SimplePipeline() {
@@ -70,10 +73,8 @@ public class SimplePipeline<T, OUT> extends AbstractPipe<T, OUT> implements Pipe
         addPipe(new WorkerThreadPipeDecorator<>(delegate, workerCount));
     }
 
-    public <INPUT, OUTPUT> void addAsThreadPoolBasedPipe(
-        Pipe<INPUT, OUTPUT> delegate, ExecutorService executorSerivce) {
-        addPipe(new ThreadPoolPipeDecorator<INPUT, OUTPUT>(delegate,
-            executorSerivce));
+    public <INPUT, OUTPUT> void addAsThreadPoolBasedPipe(Pipe<INPUT, OUTPUT> delegate, ExecutorService executorSerivce) {
+        addPipe(new ThreadPoolPipeDecorator<>(delegate, executorSerivce));
     }
 
     /**
@@ -92,6 +93,7 @@ public class SimplePipeline<T, OUT> extends AbstractPipe<T, OUT> implements Pipe
     public void init(final PipeContext ctx) {
         LinkedList<Pipe<?, ?>> pipesList = (LinkedList<Pipe<?, ?>>) pipes;
         Pipe<?, ?> prevPipe = this;
+        // 将之前添加到队列中的pipe组成一个链条， 其实直接用先进先出的队列也可以
         for (Pipe<?, ?> pipe : pipesList) {
             prevPipe.setNextPipe(pipe);
             prevPipe = pipe;

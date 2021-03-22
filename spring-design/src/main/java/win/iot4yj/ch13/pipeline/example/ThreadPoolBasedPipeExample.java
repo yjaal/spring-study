@@ -18,32 +18,28 @@ import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import io.github.viscent.mtpattern.ch13.pipeline.AbstractPipe;
-import io.github.viscent.mtpattern.ch13.pipeline.Pipe;
-import io.github.viscent.mtpattern.ch13.pipeline.PipeException;
-import io.github.viscent.mtpattern.ch13.pipeline.SimplePipeline;
-import io.github.viscent.util.Debug;
-import io.github.viscent.util.Tools;
+import win.iot4yj.ch13.pipeline.AbstractPipe;
+import win.iot4yj.ch13.pipeline.Pipe;
+import win.iot4yj.ch13.pipeline.PipeException;
+import win.iot4yj.ch13.pipeline.SimplePipeline;
+import win.iot4yj.utils.Debug;
+import win.iot4yj.utils.Tools;
 
 public class ThreadPoolBasedPipeExample {
 
     public static void main(String[] args) {
-        final ThreadPoolExecutor executorSerivce;
-        executorSerivce =
-                new ThreadPoolExecutor(1, Runtime.getRuntime()
-                        .availableProcessors() * 2, 60, TimeUnit.MINUTES,
-                        new SynchronousQueue<Runnable>(),
-                        new ThreadPoolExecutor.CallerRunsPolicy());
+        final ThreadPoolExecutor executorSerivce =
+            new ThreadPoolExecutor(1, Runtime.getRuntime()
+                .availableProcessors() * 2, 60, TimeUnit.MINUTES,
+                new SynchronousQueue<>(),
+                new ThreadPoolExecutor.CallerRunsPolicy());
 
-        final SimplePipeline<String, String> pipeline =
-                new SimplePipeline<String, String>();
+        final SimplePipeline<String, String> pipeline = new SimplePipeline<>();
         Pipe<String, String> pipe = new AbstractPipe<String, String>() {
 
             @Override
             protected String doProcess(String input) throws PipeException {
-                String result =
-                        input + "->[pipe1," + Thread.currentThread().getName()
-                                + "]";
+                String result = input + "->[pipe1," + Thread.currentThread().getName() + "]";
                 Debug.info(result);
                 return result;
             }
@@ -55,14 +51,12 @@ public class ThreadPoolBasedPipeExample {
 
             @Override
             protected String doProcess(String input) throws PipeException {
-                String result =
-                        input + "->[pipe2," + Thread.currentThread().getName()
-                                + "]";
+                String result = input + "->[pipe2," + Thread.currentThread().getName() + "]";
                 Debug.info(result);
                 try {
                     Thread.sleep(new Random().nextInt(100));
                 } catch (InterruptedException e) {
-                    ;
+                    e.printStackTrace();
                 }
                 return result;
             }
@@ -74,11 +68,8 @@ public class ThreadPoolBasedPipeExample {
 
             @Override
             protected String doProcess(String input) throws PipeException {
-                String result =
-                        input + "->[pipe3," + Thread.currentThread().getName()
-                                + "]";
+                String result = input + "->[pipe3," + Thread.currentThread().getName() + "]";
                 Debug.info(result);
-
                 // 模拟实际操作的耗时
                 Tools.randomPause(200, 90);
                 return result;

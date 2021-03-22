@@ -39,11 +39,10 @@ public class ThreadPoolPipeDecorator<IN, OUT> implements Pipe<IN, OUT> {
     private final TerminationToken terminationToken;
     private final CountDownLatch stageProcessDoneLatch = new CountDownLatch(1);
 
-    public ThreadPoolPipeDecorator(Pipe<IN, OUT> delegate,
-        ExecutorService executorSerivce) {
+    public ThreadPoolPipeDecorator(Pipe<IN, OUT> delegate, ExecutorService executorService) {
         this.delegate = delegate;
-        this.executorSerivce = executorSerivce;
-        this.terminationToken = TerminationToken.newInstance(executorSerivce);
+        this.executorSerivce = executorService;
+        this.terminationToken = TerminationToken.newInstance(executorService);
     }
 
     @Override
