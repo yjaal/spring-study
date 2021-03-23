@@ -19,7 +19,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.TimeUnit;
 
-import win.iot4yj.ch5.tpt.AbstractTerminatableThread;
+import win.iot4yj.ch5.tpt.AbstractTerminableThread;
 import win.iot4yj.ch5.tpt.TerminationToken;
 
 /**
@@ -32,7 +32,7 @@ import win.iot4yj.ch5.tpt.TerminationToken;
 public class WorkerThreadPipeDecorator<IN, OUT> implements Pipe<IN, OUT> {
 
     protected final BlockingQueue<IN> workQueue;
-    private final Set<AbstractTerminatableThread> workerThreads = new HashSet<>();
+    private final Set<AbstractTerminableThread> workerThreads = new HashSet<>();
     private final TerminationToken terminationToken = new TerminationToken();
 
     private final Pipe<IN, OUT> delegate;
@@ -50,7 +50,7 @@ public class WorkerThreadPipeDecorator<IN, OUT> implements Pipe<IN, OUT> {
 
         this.delegate = delegate;
         for (int i = 0; i < workerCount; i++) {
-            workerThreads.add(new AbstractTerminatableThread(terminationToken) {
+            workerThreads.add(new AbstractTerminableThread(terminationToken) {
                 @Override
                 protected void doRun() throws Exception {
                     try {
@@ -72,7 +72,7 @@ public class WorkerThreadPipeDecorator<IN, OUT> implements Pipe<IN, OUT> {
     @Override
     public void init(PipeContext pipeCtx) {
         delegate.init(pipeCtx);
-        for (AbstractTerminatableThread thread : workerThreads) {
+        for (AbstractTerminableThread thread : workerThreads) {
             thread.start();
         }
     }
@@ -85,7 +85,7 @@ public class WorkerThreadPipeDecorator<IN, OUT> implements Pipe<IN, OUT> {
 
     @Override
     public void shutdown(long timeout, TimeUnit unit) {
-        for (AbstractTerminatableThread thread : workerThreads) {
+        for (AbstractTerminableThread thread : workerThreads) {
             thread.terminate();
             try {
                 thread.join(TimeUnit.MILLISECONDS.convert(timeout, unit));

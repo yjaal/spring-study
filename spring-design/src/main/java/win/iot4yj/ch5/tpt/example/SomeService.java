@@ -16,7 +16,7 @@ package win.iot4yj.ch5.tpt.example;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-import win.iot4yj.ch5.tpt.AbstractTerminatableThread;
+import win.iot4yj.ch5.tpt.AbstractTerminableThread;
 import win.iot4yj.utils.Tools;
 
 public class SomeService {
@@ -25,7 +25,7 @@ public class SomeService {
     private final Producer producer = new Producer();
     private final Consumer consumer = new Consumer();
 
-    private class Producer extends AbstractTerminatableThread {
+    private class Producer extends AbstractTerminableThread {
         private int i = 0;
 
         @Override
@@ -36,7 +36,7 @@ public class SomeService {
 
     };
 
-    private class Consumer extends AbstractTerminatableThread {
+    private class Consumer extends AbstractTerminableThread {
 
         @Override
         protected void doRun() throws Exception {

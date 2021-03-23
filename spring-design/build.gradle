@@ -21,6 +21,9 @@ dependencies {
 
     implementation group: 'mysql', name: 'mysql-connector-java', version: '5.1.49'
 
+    // 这个只是在demo1中会用到
+    implementation group: 'org.apache.hadoop', name: 'hadoop-core', version: '1.2.1'
+
     //模板引擎
     compile group: 'org.apache.velocity', name: 'velocity-engine-core', version: '2.2'
 

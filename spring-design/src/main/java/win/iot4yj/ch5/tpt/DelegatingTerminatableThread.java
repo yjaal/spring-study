@@ -1,6 +1,6 @@
 package win.iot4yj.ch5.tpt;
 
-public class DelegatingTerminatableThread extends AbstractTerminatableThread {
+public class DelegatingTerminatableThread extends AbstractTerminableThread {
     private final Runnable task;
 
     public DelegatingTerminatableThread(Runnable task) {
@@ -12,7 +12,7 @@ public class DelegatingTerminatableThread extends AbstractTerminatableThread {
         this.task.run();
     }
 
-    public static AbstractTerminatableThread of(Runnable task) {
+    public static AbstractTerminableThread of(Runnable task) {
         DelegatingTerminatableThread ret = new DelegatingTerminatableThread(
                 task);
         return ret;

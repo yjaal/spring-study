@@ -23,9 +23,9 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Viscent Huang
  */
-public abstract class AbstractTerminatableThread extends Thread implements Terminatable {
+public abstract class AbstractTerminableThread extends Thread implements Terminatable {
 
-    private static final Logger log = LoggerFactory.getLogger(AbstractTerminatableThread.class);
+    private static final Logger log = LoggerFactory.getLogger(AbstractTerminableThread.class);
     private final boolean DEBUG = true;
 
     /**
@@ -33,7 +33,7 @@ public abstract class AbstractTerminatableThread extends Thread implements Termi
      */
     public final TerminationToken terminationToken;
 
-    public AbstractTerminatableThread() {
+    public AbstractTerminableThread() {
         this(new TerminationToken());
     }
 
@@ -42,7 +42,7 @@ public abstract class AbstractTerminatableThread extends Thread implements Termi
      * @param terminationToken
      *            线程间共享的线程终止标志实例
      */
-    public AbstractTerminatableThread(TerminationToken terminationToken) {
+    public AbstractTerminableThread(TerminationToken terminationToken) {
         this.terminationToken = terminationToken;
         terminationToken.register(this);
     }

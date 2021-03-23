@@ -44,7 +44,6 @@ public class ThreadPoolBasedPipeExample {
                 return result;
             }
         };
-
         pipeline.addAsThreadPoolBasedPipe(pipe, executorSerivce);
 
         pipe = new AbstractPipe<String, String>() {
@@ -61,7 +60,6 @@ public class ThreadPoolBasedPipeExample {
                 return result;
             }
         };
-
         pipeline.addAsThreadPoolBasedPipe(pipe, executorSerivce);
 
         pipe = new AbstractPipe<String, String>() {
@@ -83,11 +81,10 @@ public class ThreadPoolBasedPipeExample {
                 try {
                     executorSerivce.awaitTermination(timeout, unit);
                 } catch (InterruptedException e) {
-                    ;
+                    e.printStackTrace();
                 }
             }
         };
-
         pipeline.addAsThreadPoolBasedPipe(pipe, executorSerivce);
 
         pipeline.init(pipeline.newDefaultPipelineContext());
@@ -97,10 +94,8 @@ public class ThreadPoolBasedPipeExample {
             for (int i = 0; i < N; i++) {
                 pipeline.process("Task-" + i);
             }
-        } catch (IllegalStateException e) {
-            ;
-        } catch (InterruptedException e) {
-            ;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         pipeline.shutdown(10, TimeUnit.SECONDS);
