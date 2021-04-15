@@ -148,11 +148,11 @@ public class DataSyncTask implements Runnable {
         final String ftpServerDir = this.config.getProperty("ftp.serverdir");
 
         // AbstractParallelPipe类的源码参见清单13-7
-        ret = new AbstractParallelPipe<File, File, File>(
-            new SynchronousQueue<File>(), ftpExecutorService) {
+        ret = new AbstractParallelPipe<File, File, File>( new SynchronousQueue<>(),
+            ftpExecutorService) {
+
             @SuppressWarnings("unchecked")
-            final Future<FTPUploader>[] ftpClientUtilHolders =
-                new Future[ftpServerConfigs.length];
+            final Future<FTPUploader>[] ftpClientUtilHolders = new Future[ftpServerConfigs.length];
 
             @Override
             public void init(PipeContext pipeCtx) {

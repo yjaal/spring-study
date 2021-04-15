@@ -48,9 +48,8 @@ public class PipelineTaskTest {
         };
         PipelineWork<TestItem, TestItem> middle = item -> {
             item.setVal(item.getVal() * 2);
-            log.info(
-                Thread.currentThread().getName() + ": 中节点设置(" + level + ")  value: " + item
-                    .getVal());
+            log.info(Thread.currentThread().getName() + ": 中节点设置(" + level + ")  value: "
+                + item.getVal());
             return item;
         };
         PipelineWork<TestItem, Object> trailer = item -> {
